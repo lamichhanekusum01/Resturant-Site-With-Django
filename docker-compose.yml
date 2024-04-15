@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  django:
+    container_name: django
+    image: django-docker:0.0.1
+    build: 
+      context: ./src
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./src:/usr/src/app/
+    ports:
+      - 8001:8000
+    environment:
+      - ALLOWED_HOST=localhost,127.0.0.1
