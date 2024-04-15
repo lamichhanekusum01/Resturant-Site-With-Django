@@ -1,28 +1,13 @@
-# base image  
-FROM python:3.11.4
-# setup environment variable  
-ENV DockerHOME=/usr/src/app
+FROM python:3.10-slim-buster
 
-# set work directory  
-RUN mkdir -p $DockerHOME  
+WORKDIR /app
 
-# where your code lives  
-WORKDIR $DockerHOME  
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt
 
-# set environment variables  
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1  
+COPY . .
 
-# install dependencies  
-RUN pip install --upgrade pip  
+CMD [ "python", "manage.py", "runserver", "127.0.0.1:8000"]
 
-COPY ./entrypoint.sh ${DockerHOME}
-# copy whole project to your docker home directory. 
-COPY . $DockerHOME  
-# run this command to install all dependencies  
-RUN pip install -r requirements.txt  
-
-# RUN python manage.py makemigration
-# RUN python manage.py migrate
-
-#ENTRYPOINT [ "usr/src/app/entrypoint.sh" ]
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
